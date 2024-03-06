@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+     <head>
+          <title></title>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link href="/styles.css" rel="stylesheet">
+          <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+          <script src="/script.js"></script>
+     </head>
+     <body class="m-0 p-0 box-border flex flex-col items-center w-full h-screen">
+          <header class="flex w-full items-center justify-between bg-blue-800 p-5">
+               <div>
+                    <h1 class="text-3xl font-bold text-white">
+                         <% if(user.role_id == '2') { %> HOD Dashboard <% } else { %> IQAC Team Dashboard <% } %>
+                    </h1>
+                    <p class="text-sm font-light text-slate-50">Welcome <%=user.username %></p>
+               </div>
+               <div>
+                    <button hx-delete="/logout" hx-target="body" class="text-white px-4 py-2 border rounded hover:bg-white hover:text-black active:bg-slate-50 active:text-black active:scale-95">Logout</a>
+               </div>
+          </header>
+          <form hx-post="/api/get-checklist" hx-target="#table-area" hx-swap="outerHTML" class="p-3 border w-full">
+               <label for="id" class="font-bold">Year:</label>
+               <select name="id" class="border text-sm rounded px-2 py-1">
+                    <option value="" disabled selected>Choose a year</option>  
+                    <% records.forEach(function(record){ %>
+                    <option value="<%= record.id %>"> <%= record.year %> </option>  
+                    <% }); %>
+               </select>
+               <button class="text-sm active:scale-95 bg-blue-600 text-white hover:bg-blue-800 px-2 py-1 rounded" type="submit">Get Record</button>
+          </form>
+          <div class="table-container w-full overflow-x-scroll flex items-start justify-start flex-grow">
+               <div id="table-area" class="flex w-full pt-40 items-center justify-center">
+                    Choose a year to show details
+               </div>
+          </div>
+     </body>
+</html>
