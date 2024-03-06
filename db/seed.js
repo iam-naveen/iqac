@@ -69,7 +69,8 @@ const usersTable = {
     "FOREIGN KEY (role_id) REFERENCES roles(id)",
   ],
   data: [
-    [1, 'naveen', 'naveen', 1, 2, new Date(), new Date()]
+    // Add your name and password here in the empty spots
+    [1, '', '', 1, 2, new Date(), new Date()]
   ],
 }
 
