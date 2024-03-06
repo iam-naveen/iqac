@@ -25,7 +25,10 @@ const departmentsTable = {
     "INDEX idx_dept_id (id)"
   ],
   data: [
-    [1, 'admin', new Date(), new Date()],
+    [1, 'CSE', new Date(), new Date()],
+    [2, 'IT', new Date(), new Date()],
+    [3, 'ECE', new Date(), new Date()],
+    [4, 'MECH', new Date(), new Date()],
   ],
 }
 
@@ -56,7 +59,7 @@ const usersTable = {
     { name: 'id', type: 'INT', options: 'AUTO_INCREMENT PRIMARY KEY' },
     { name: 'username', type: 'VARCHAR(255)', options: 'NOT NULL' },
     { name: 'password', type: 'VARCHAR(255)', options: 'NOT NULL' },
-    { name: 'dept_id', type: 'INT', options: 'NOT NULL' },
+    { name: 'dept_id', type: 'INT', options: '' },
     { name: 'role_id', type: 'INT', options: 'NOT NULL' },
     { name: 'created_at', type: 'TIMESTAMP', options: 'DEFAULT CURRENT_TIMESTAMP' },
     { name: 'updated_at', type: 'TIMESTAMP', options: 'DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' },
@@ -66,7 +69,7 @@ const usersTable = {
     "FOREIGN KEY (role_id) REFERENCES roles(id)",
   ],
   data: [
-    [1, 'admin', 'admin', 1, 1, new Date(), new Date()],
+    [1, 'naveen', 'naveen', 1, 2, new Date(), new Date()]
   ],
 }
 
@@ -115,10 +118,10 @@ const itemsTable = {
     [8, 'Parents Meeting / Feedback', 0, '', 1, new Date(), new Date()],
     [9, 'Leave and On - Duty Request', 0, '', 1, new Date(), new Date()],
     [10, 'Seminar / Department Activities / Program Report', 0, '', 1, new Date(), new Date()],
-    [11, 'Alumini Details', 0, '', 1, new Date(), new Date()],
+    [11, 'Alumini Details', 1, '', 1, new Date(), new Date()],
     [12, 'Internal Assessment Mark Register / Progress Report', 0, '', 1, new Date(), new Date()],
     [13, 'Students Attendance Register', 0, '', 1, new Date(), new Date()],
-    [14, 'Industrial Visit', 0, '', 1, new Date(), new Date()],
+    [14, 'Industrial Visit', 1, '', 1, new Date(), new Date()],
     [15, 'Substitution Register', 0, '', 1, new Date(), new Date()],
     [16, 'Disciplinary Action', 0, '', 1, new Date(), new Date()],
     [17, 'Remedial Mark List', 0, '', 1, new Date(), new Date()],
@@ -127,7 +130,7 @@ const itemsTable = {
     [20, 'Circular File', 0, '', 1, new Date(), new Date()],
     [21, 'Event File', 0, '', 1, new Date(), new Date()],
     [22, 'Moovalur Scheme', 0, '', 1, new Date(), new Date()],
-    [23, 'Syllabus Analysis', 0, '', 1, new Date(), new Date()],
+    [23, 'Syllabus Analysis', 1, '', 1, new Date(), new Date()],
     [24, 'Individual Time Table', 0, '', 1, new Date(), new Date()],
     [25, 'Lesson Plan', 0, '', 1, new Date(), new Date()],
     [26, 'Test Schedule', 0, '', 1, new Date(), new Date()],
