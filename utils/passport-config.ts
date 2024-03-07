@@ -1,10 +1,10 @@
 import { Strategy as LocalStrategy } from "passport-local";
 
-/**
-* @param {import('passport')} passport
-* @returns {void}
-* */
-export default function initialise(passport, getUserByDetails, getUserById) {
+export default function initialise(
+  passport,
+  getUserByDetails,
+  getUserById
+) {
   const authenticateUser = async (req, username, password, done) => {
     const user = await getUserByDetails(username, req.body);
     if (user == null) {

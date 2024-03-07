@@ -1,4 +1,4 @@
-export default function escapeHtmlText(value) {
+export default function escapeHtmlText(value: string) {
   const stringValue = value.toString()
   const entityMap = {
     '&': '&amp;',
@@ -13,5 +13,5 @@ export default function escapeHtmlText(value) {
 
   // Match any of the characters inside /[ ... ]/
   const regex = /[&<>"'`=/]/g
-  return stringValue.replace(regex, match => entityMap[match])
+  return stringValue.replace(regex, (match) => entityMap[match as keyof typeof entityMap])
 }

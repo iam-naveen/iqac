@@ -1,17 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import sql from '../utils/db.js';
-
-/**
- * @typedef { {name: string, type: string, options: string} } Column
- * @typedef { {name: string, columns: Column[], relations: string[], data: any[] } } Table
- * @typedef {import("mysql2").Connection} Connection
- **/
-
 const dbname = 'IQAC';
 
-/** @type {Table} */
 const departmentsTable = {
   name: 'departments',
   columns: [
@@ -32,7 +23,6 @@ const departmentsTable = {
   ],
 }
 
-/** @type {Table} */
 const rolesTable = {
   name: 'roles',
   columns: [
@@ -52,7 +42,6 @@ const rolesTable = {
   ],
 }
 
-/** @type {Table} */
 const usersTable = {
   name: 'users',
   columns: [
@@ -92,7 +81,6 @@ const checklistsTable = {
   ],
 }
 
-/** @type {Table} */
 const itemsTable = {
   name: 'items',
   columns: [
@@ -142,7 +130,6 @@ const itemsTable = {
   ],
 }
 
-/** @type {Table[]} */
 const tables = [
   rolesTable,
   departmentsTable,
@@ -151,39 +138,43 @@ const tables = [
   itemsTable,
 ]
 
-/** @param { Connection } db - database connection object */
-function seed(db) {
-  db.query(`CREATE DATABASE IF NOT EXISTS ${dbname}`, (err) => {
-    if (err) throw err;
-    console.log(`---- Database ${dbname} created`);
-    db.query(`USE ${dbname}`, (err) => {
-      if (err) throw err;
-      console.log(`---- Using database ${dbname}`);
-      tables.forEach((table) => {
-        let query = `CREATE TABLE IF NOT EXISTS ${table.name}(`;
-        query += table.columns.map(col => `${col.name} ${col.type} ${col.options}`).join(', ');
-        if (table.relations.length) {
-          query += ', ' + table.relations.join(', ') + ')';
-        } else {
-          query += ')';
-        }
-        db.query(query, (err) => {
-          if (err) throw err;
-          console.log(`-------- Table ${table.name} created`);
-          if (table.data.length) {
-            db.query(`INSERT INTO ${table.name} VALUES ?`, [table.data], (err) => {
-              if (err) throw err;
-              console.log(`------------ Data inserted into ${table.name}`);
-            });
-          }
-        });
-      });
-    });
+async function seed(db: Connection) {
+  await db.query("CREATE DATABASE IF NOT EXISTS ?", [dbname])
+  console.log(`---- Database ${dbname} created`);
+  await db.query("USE ?", [dbname])
+  console.log(`---- Using database ${dbname}`);
+  tables.forEach(async (table) => {
+    let query = `CREATE TABLE IF NOT EXISTS ${table.name}(`;
+    query += table.columns.map(col => `${col.name} ${col.type} ${col.options}`).join(', ');
+    if (table.relations.length) {
+      query += ', ' + table.relations.join(', ') + ')';
+    } else {
+      query += ')';
+    }
+    db.query(query)
+    console.log(`-------- Table ${table.name} created`);
+    if (table.data.length) {
+      await db.query(`INSERT INTO ${table.name} VALUES ?`, [table.data])
+      console.log(`------------ Data inserted into ${table.name}`);
+    }
   });
 }
 
 console.log("Connecting...")
-const db = sql("");
-console.log("Database connected!!\n")
-console.log("Seeding data...")
-seed(db)
+
+
+import { drizzle } from "drizzle-orm/mysql2";
+import * as mysql from "mysql2";
+try{
+
+const connection = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  waitForConnections: true,
+});
+const db = drizzle(connection);
+}
+catch(e){
+  console.log(e);
+}
+
