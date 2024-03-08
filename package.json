@@ -6,17 +6,18 @@
   "type": "module",
   "scripts": {
     "build:css": "tailwind build src/styles.css -o public/styles.css",
-    "db:seed": "bun db/seed.ts",
     "dev": "bun --watch index.ts",
     "tailwind": "tailwindcss -i ./raw.css -o public/styles.css --watch",
-    "start": "bun index.ts"
+    "start": "bun index.ts",
+    "db:gen": "drizzle-kit generate:pg",
+    "db:push": "drizzle-kit push:pg",
+    "db:seed": "bun run db/seed.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
-    "drizzle": "^1.4.0",
     "drizzle-orm": "^0.29.5",
     "ejs": "^3.1.9",
     "express": "^4.18.3",
@@ -26,7 +27,9 @@
     "mysql2": "^3.9.2",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "pg": "^8.11.3",
+    "postgres": "^3.4.3"
   },
   "devDependencies": {
     "@types/bun": "latest",
