@@ -59,25 +59,52 @@ app.get("/login", allowNonUsersOnly, (_, res) => {
 });
 
 app.get("/", allowUsersOnly, async (req, res) => {
-  const user = await req.user
+  /** @type {{id:number, username:string, password:string, dept_id:number, role_id:number}} */
+  const user = await req.user;
   if (user.role_id === 2) {
     const sql = "select id, year, dept_id from checklist where dept_id=?"
     const result = await database.promise().query(sql, [user.dept_id]);
     res.render("pages/dashboard.html", { user, records: result[0] });
   } else if (user.role_id === 3) {
-    const sql = "select * from checklist";
-    const result = await database.promise().query(sql);
-    console.log(result[0])
-    res.render("pages/dashboard.html", { user, records: result[0] });
+    const sql = "select * from departments";
+    const [records] = await database.promise().query(sql);
+    res.render("pages/dashboard.html", { user, records });
   }
 });
 
 app.post("/api/get-checklist", allowUsersOnly, async (req, res) => {
-  const { id } = req.body;
+  const { id, dept } = req.body;
   const user = await req.user
-  const sql = "select * from checklist join items on checklist.id=items.checklist_id where checklist_id=?";
-  const result = await database.promise().query(sql, [id]);
+  const sql = `select * from check_item where checklist_id=?`;
+  const result = await database.promise().query(sql, [id, dept]);
   res.render("slots/table-content.html", { user, checklist: result[0] });
+})
+
+app.post("/api/create-checklist", allowUsersOnly, async (req, res) => {
+  try {
+    const { year, dept } = req.body;
+    let sql = "insert into checklist (year, dept_id) values (?, ?)";
+    const [{ insertId }] = await database.promise().query(sql, [year, dept]);
+    sql = "select * from items";
+    const [items] = await database.promise().query(sql);
+    sql = "insert into check_item (checklist_id, text) values ?";
+    const values = items.map(item => [insertId, item.text]);
+    await database.promise().query(sql, [values]);
+    sql = "select * from departments";
+    const [records] = await database.promise().query(sql);
+    const user = await req.user;
+    res.render("pages/dashboard.html", { user, records });
+  } catch (err) { 
+    console.log(err)
+    res.send("Record for this Year and Department Already Exists! Reload the page to Continue.")
+  }
+})
+
+app.get("/api/get-year", allowUsersOnly, async (req, res) => {
+  const id = req.query.id;
+  const sql = "select * from checklist where dept_id=?";
+  const [records] = await database.promise().query(sql, [id]);
+  res.render("slots/year-form.html", { dept: id, records });
 })
 
 app.post("/api/edit-table", allowUsersOnly, async (req, res) => {
@@ -85,13 +112,13 @@ app.post("/api/edit-table", allowUsersOnly, async (req, res) => {
 });
 
 app.post("/api/save", allowUsersOnly, async (req, res) => {
-  let { id, status, comment } = req.body
-  const sql = "update items set status=?, comment=? where id=?";
-  status = status === "true" ? 1 : 0;
-  await database.promise().query(sql, [status, comment, id]);
-  const result = await database.promise().query("select * from items where id=?", [id]);
+  let { id, status, comment, pos } = req.body
+  const sql = "update check_item set status=?, comment=? where id=?";
+  status = (status === "true") ? 1 : 0;
+  await database.promise().query(sql, [ status, comment, id]);
+  const [[ item ]] = await database.promise().query("select * from check_item where id=?", [id]);
   const user = await req.user
-  res.render("slots/row.html", { user, item: result[0][0] });
+  res.render("slots/row.html", { user, item, pos });
 });
 
 app.post("/login", allowNonUsersOnly, (req, res, next) => {

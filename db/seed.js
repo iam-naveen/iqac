@@ -70,7 +70,8 @@ const usersTable = {
   ],
   data: [
     // Add your name and password here in the empty spots
-    [1, '', '', 1, 2, new Date(), new Date()]
+    [1, 'hod', 'hod', 1, 2, new Date(), new Date()],
+    [2, 'team', 'team', 1, 3, new Date(), new Date()]
   ],
 }
 
@@ -86,17 +87,14 @@ const checklistsTable = {
   relations: [
     "FOREIGN KEY (dept_id) REFERENCES departments(id)",
     "INDEX idx_checklist_id (id)",
+    "UNIQUE (year, dept_id)"
   ],
-  data: [
-    [1, 2024, 1, new Date(), new Date()],
-  ],
+  data: [],
 }
 
-/** @type {Table} */
-const itemsTable = {
-  name: 'items',
+const checkItems = {
+  name: 'check_item',
   columns: [
-    // 'id', 'text', 'status', 'comment', 'checklist_id', 'created_at', 'updated_at',
     { name: 'id', type: 'INT', options: 'AUTO_INCREMENT PRIMARY KEY' },
     { name: 'text', type: 'VARCHAR(255)', options: 'NOT NULL' },
     { name: 'status', type: 'INT', options: 'NOT NULL DEFAULT 0' },
@@ -106,39 +104,53 @@ const itemsTable = {
     { name: 'updated_at', type: 'TIMESTAMP', options: 'DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' },
   ],
   relations: [
-    "FOREIGN KEY (checklist_id) REFERENCES checklist(id)"
+    "FOREIGN KEY (checklist_id) REFERENCES checklist(id)",
+  ],
+  data: []
+}
+
+/** @type {Table} */
+const itemsTable = {
+  name: 'items',
+  columns: [
+    // 'id', 'text', 'status', 'comment', 'checklist_id', 'created_at', 'updated_at',
+    { name: 'id', type: 'INT', options: 'AUTO_INCREMENT PRIMARY KEY' },
+    { name: 'text', type: 'VARCHAR(255)', options: 'NOT NULL' },
+  ],
+  relations: [
+    "INDEX idx_item_id (id)"
   ],
   data: [
-    [1, 'Stock Register', 0, '', 1, new Date(), new Date()],
-    [2, 'Inward Register', 0, '', 1, new Date(), new Date()],
-    [3, 'Outward Register', 0, '', 1, new Date(), new Date()],
-    [4, 'Students and Staff Profile', 0, '', 1, new Date(), new Date()],
-    [5, 'Result Analysis (Semester + Subject)', 0, '', 1, new Date(), new Date()],
-    [6, 'Student Feedback - Overall Feedback', 0, '', 1, new Date(), new Date()],
-    [7, 'Student Feedback - Individual Feedback', 0, '', 1, new Date(), new Date()],
-    [8, 'Parents Meeting / Feedback', 0, '', 1, new Date(), new Date()],
-    [9, 'Leave and On - Duty Request', 0, '', 1, new Date(), new Date()],
-    [10, 'Seminar / Department Activities / Program Report', 0, '', 1, new Date(), new Date()],
-    [11, 'Alumini Details', 1, '', 1, new Date(), new Date()],
-    [12, 'Internal Assessment Mark Register / Progress Report', 0, '', 1, new Date(), new Date()],
-    [13, 'Students Attendance Register', 0, '', 1, new Date(), new Date()],
-    [14, 'Industrial Visit', 1, '', 1, new Date(), new Date()],
-    [15, 'Substitution Register', 0, '', 1, new Date(), new Date()],
-    [16, 'Disciplinary Action', 0, '', 1, new Date(), new Date()],
-    [17, 'Remedial Mark List', 0, '', 1, new Date(), new Date()],
-    [18, 'Work Load File', 0, '', 1, new Date(), new Date()],
-    [19, 'Student\'s +2 Mark List', 0, '', 1, new Date(), new Date()],
-    [20, 'Circular File', 0, '', 1, new Date(), new Date()],
-    [21, 'Event File', 0, '', 1, new Date(), new Date()],
-    [22, 'Moovalur Scheme', 0, '', 1, new Date(), new Date()],
-    [23, 'Syllabus Analysis', 1, '', 1, new Date(), new Date()],
-    [24, 'Individual Time Table', 0, '', 1, new Date(), new Date()],
-    [25, 'Lesson Plan', 0, '', 1, new Date(), new Date()],
-    [26, 'Test Schedule', 0, '', 1, new Date(), new Date()],
-    [27, 'Model Question Paper', 0, '', 1, new Date(), new Date()],
-    [28, 'Add On and Diploma Courses', 0, '', 1, new Date(), new Date()],
-    [29, 'Academic Audit Report', 0, '', 1, new Date(), new Date()],
-    [30, 'Library Book List File', 0, '', 1, new Date(), new Date()],
+    [1, 'Stock Register'],
+    [2, 'Inward Register'],
+    [3, 'Outward Register'],
+    [4, 'Students and Staff Profile'],
+    [5, 'Result Analysis (Semester + Subject)'],
+    [6, 'Student Feedback - Overall Feedback'],
+    [7, 'Student Feedback - Individual Feedback'],
+    [8, 'Parents Meeting / Feedback'],
+    [9, 'Leave and On - Duty Request'],
+    [10, 'Seminar / Department Activities / Program Report'],
+    [11, 'Alumini Details'],
+    [12, 'Internal Assessment Mark Register / Progress Report'],
+    [13, 'Students Attendance Register'],
+    [14, 'Industrial Visit'],
+    [15, 'Substitution Register'],
+    [16, 'Disciplinary Action'],
+    [17, 'Remedial Mark List'],
+    [18, 'Work Load File'],
+    [19, 'Student\'s +2 Mark List'],
+    [20, 'Circular File'],
+    [21, 'Event File'],
+    [22, 'Moovalur Scheme'],
+    [23, 'Syllabus Analysis'],
+    [24, 'Individual Time Table'],
+    [25, 'Lesson Plan'],
+    [26, 'Test Schedule'],
+    [27, 'Model Question Paper'],
+    [28, 'Add On and Diploma Courses'],
+    [29, 'Academic Audit Report'],
+    [30, 'Library Book List File'],
   ],
 }
 
@@ -149,6 +161,7 @@ const tables = [
   usersTable,
   checklistsTable,
   itemsTable,
+  checkItems,
 ]
 
 /** @param { Connection } db - database connection object */

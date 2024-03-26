@@ -20,16 +20,45 @@
                     <button hx-delete="/logout" hx-target="body" class="text-white px-4 py-2 border rounded hover:bg-white hover:text-black active:bg-slate-50 active:text-black active:scale-95">Logout</a>
                </div>
           </header>
+          <% if (user.role_id == '2') { %>
           <form hx-post="/api/get-checklist" hx-target="#table-area" hx-swap="outerHTML" class="p-3 border w-full">
                <label for="id" class="font-bold">Year:</label>
                <select name="id" class="border text-sm rounded px-2 py-1">
                     <option value="" disabled selected>Choose a year</option>  
-                    <% records.forEach(function(record){ %>
-                    <option value="<%= record.id %>"> <%= record.year %> </option>  
+                    <% records.forEach(function(list){ %>
+                    <option value="<%= list.id %>"> <%= list.year %> </option>  
                     <% }); %>
                </select>
+               <input type="hidden" name="dept" value="<%= user.dept_id %>" />
                <button class="text-sm active:scale-95 bg-blue-600 text-white hover:bg-blue-800 px-2 py-1 rounded" type="submit">Get Record</button>
           </form>
+          <% } else { %>
+          <div class="flex gap-2 p-3 border w-full items-center justify-between">
+               <div class="flex flex-wrap w-fit gap-2">
+                    <div id="choose-dept">
+                         <label for="id" class="font-bold">DEPT:</label>
+                         <select hx-get="/api/get-year" hx-target="#choose-year" hx-trigger="change" hx-swap="outerHTML" name="id" class="border text-sm rounded px-2 py-1">
+                              <option value="" disabled selected>Choose department</option>  
+                              <% records.forEach(function(dept){ %>
+                              <option value="<%= dept.id %>"> <%= dept.name %> </option>  
+                              <% }); %>
+                         </select>
+                    </div>
+                    <div id="choose-year"></div>
+               </div>
+               <form hx-post="/api/create-checklist" hx-target="body" class="flex flex-wrap w-fit justify-end gap-2">
+                    <label class="font-bold">Create New Record: </label>
+                    <select name="dept" class="border text-sm rounded px-2 py-1">
+                         <option value="" disabled selected>Choose department</option>  
+                         <% records.forEach(function(dept){ %>
+                         <option value="<%= dept.id %>"> <%= dept.name %> </option>  
+                         <% }); %>
+                    </select>
+                    <input name="year" type="number" min="1900" max="2099" step="1" placeholder="year" value="<% new Date().getFullYear() %>" class="border rounded px-3" />
+                    <button type="submit" class="text-sm active:scale-95 bg-blue-600 text-white hover:bg-blue-800 px-2 py-1 rounded">Create</button>
+               </form>
+          </div>
+          <% } %>
           <div class="table-container w-full overflow-x-scroll flex items-start justify-start flex-grow">
                <div id="table-area" class="flex w-full pt-40 items-center justify-center">
                     Choose a year to show details

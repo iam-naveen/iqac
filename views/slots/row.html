@@ -1,5 +1,5 @@
 <tr class="border p-3 text-center odd:bg-slate-100">
-     <td class="border p-3 w-[10%]"><%= item.id %></td>
+     <td class="border p-3 w-[10%]"><%= pos %></td>
      <td class="border p-3 text-left w-[40%]"><%= item.text %></td>
      <% if(item.status=='0') { %>
      <td class="border p-3 bg-red-400 text-xs font-bold w-[10%]">NOT DONE</td>
@@ -14,7 +14,7 @@
            hx-post="/api/edit-table"
            hx-target="closest tr"
            hx-swap="outerHTML"
-           hx-vals='{ "id": "<%= item.id %>", "text": "<%= item.text %>", "status": "<%= item.status %>", "comment": "<%= item.comment %>" }'
+           hx-vals='{ "id": "<%= item.id %>", "text": "<%= item.text %>", "status": "<%= item.status %>", "comment": "<%= item.comment %>", "pos":<%=pos%> }'
       >
       Edit
      </td>

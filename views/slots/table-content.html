@@ -9,8 +9,8 @@
           </tr>
      </thead>
      <tbody>
-          <% checklist.forEach(function(item){ %>
-          <%- include('row.html', { item: item }); %>
+          <% checklist.forEach(function(item, i){ %>
+          <%- include('row.html', { item, pos: i+1 }); %>
           <% }); %>
      </tbody>
 </table>
